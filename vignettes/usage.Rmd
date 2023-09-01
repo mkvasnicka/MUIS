@@ -25,7 +25,7 @@ Note: As the package uses personal API keys, the code can't be run in the vignet
 You may install the package only from github:
 
 ```{r install, eval = FALSE}
-devtools::install_github("mkvasnicka/MUIS")
+devtools::install_github("mkvasnicka/MUIS", build_vignettes = TRUE)
 ```
 
 
