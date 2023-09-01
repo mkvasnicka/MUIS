@@ -1,0 +1,154 @@
+---
+title: "**MUIS** Typical Usage"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{usage}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+This vignette provides a brief overview of the typical usage of the MUIS package. This package is designed to help teachers of Masaryk University, to work with the MU\ IS system. It provides functions for getting information about students enrolled in a seminar, their points, and so on. It also provides functions for creating IS new notebooks and writing to them.
+
+Note: As the package uses personal API keys, the code can't be run in the vignette.
+
+
+
+## Installation
+
+You may install the package only from github:
+
+```{r install, eval = FALSE}
+devtools::install_github("mkvasnicka/MUIS")
+```
+
+
+
+## Loading and credentials
+
+After installation, you may load the package (and other useful packages):
+
+```{r setup, message = FALSE, warning = FALSE}
+library(MUIS)
+library(tidyverse)
+```
+
+```{r, echo = FALSE}
+# whether to evaluate the code
+EVAL <- FALSE
+```
+
+First of all, you need to create a credentials object. This object contains your key, faculty, and course. You may create it using the `credentials()` function.
+
+First, you must go to MU IS\ > Teacher's Notebook\ > Notebooks > Povolení API. There you must create a new API key. You have to set the date when the API key is valid and connect it to IP address of your computer. You may lean your IP address on web (e.g., <https://www.myip.com/>) or using the Linux `ifconfig` command in the command line. 
+
+Then you can create the credentials object. You supply the API key, your faculty number (seen in the URL of your Teacher's Notebook), and the course code. Here I create credentials for two linked courses:
+
+```{r, eval = EVAL}
+micro <- credentials(
+  key = "Z6o4VCwTOPPYGWI9",
+  faculty = 1456,
+  course = "BPE_MIE1"
+)
+mivs <- credentials(
+  key = "T_EVbceQ0fdFaulj",
+  faculty = 1456,
+  course = "MPE_MIVS"
+)
+```
+
+
+
+## Getting information on seminars and teachers
+
+
+Now you can list the open seminars of the course:
+
+```{r, eval = EVAL}
+list_open_seminars(micro)
+```
+
+You can get the list of seminar teachers of the course:
+
+```{r, eval = EVAL}
+get_teachers(micro)
+```
+
+
+## Getting information on students
+
+You can get the list of all students or the list of students enrolled in a seminar:
+
+```{r, eval = EVAL}
+get_students(micro)
+get_seminar_students(micro)
+```
+
+As Micro\ 1 and MIVS are joined courses, you may join the lists; you have to link the seminar groups:
+
+```{r, eval = EVAL}
+students <- bind_rows(
+  get_seminar_students(micro),
+  get_seminar_students(mivs) |> mutate(seminar = "26")
+)
+```
+
+
+
+## Reading IS notebooks
+
+You can get list of all IS notebooks of the course:
+
+```{r, eval = EVAL}
+list_notebooks(micro)
+```
+
+You can read the content of an IS notebook like this:
+
+```{r, eval = EVAL}
+read_notebook(micro, "bodysemin02")
+```
+
+If the notebook includes IS points (number after asterisk), you can get them like this:
+
+```{r, eval = EVAL}
+read_point_notebook(micro, "bodysemin02")
+```
+
+
+
+## Getting information on attendance
+
+Students' attendance is stored in special notebooks. You can list them like this:
+
+```{r, eval = EVAL}
+list_presence_notebooks(micro)
+```
+
+You can read the content of one attendance notebook with `read_presence_notebook()`. Usually, you want to read all attendance notebooks, join them together, and obtain the number of attendances:
+
+```{r, eval = EVAL}
+read_all_presence_points(micro)
+```
+
+
+
+## Creating new IS notebook
+
+You can create a new notebook with `create_notebook()`. By default, it adds all students in the course to the notebook. You can also write a string into the notebook with `init_value` parameter. For other parameters, see the documentation.
+
+```{r, eval = EVAL}
+create_notebook(mivs, "Test Notebook", "testnbk")
+```
+
+
+
+## Writing to IS Notebooks
+
+You can write values to IS notebooks with `write_notebook()`.
