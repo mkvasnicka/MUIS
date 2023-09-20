@@ -4,13 +4,13 @@
 \alias{read_notebook}
 \title{Read content of an IS notebook}
 \usage{
-read_notebook(credentials, block)
+read_notebook(credentials, notebook)
 }
 \arguments{
 \item{credentials}{(object of class "IScredentials") credentials
 created by credentials()}
 
-\item{block}{(string) the shortcut of the notebook}
+\item{notebook}{(string) the shortcut of the notebook}
 }
 \value{
 A tibble with columns "uco" and "content".

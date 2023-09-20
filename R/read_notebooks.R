@@ -35,7 +35,7 @@ list_notebooks <- function(credentials) {
 #'
 #' @param credentials (object of class "IScredentials") credentials
 #' created by credentials()
-#' @param block (string) the shortcut of the notebook
+#' @param notebook (string) the shortcut of the notebook
 #'
 #' @return A tibble with columns "uco" and "content".
 #'
@@ -46,13 +46,18 @@ list_notebooks <- function(credentials) {
 #' @note was `read_is_block()`
 #'
 #' @export
-read_notebook <- function(credentials, block) {
+read_notebook <- function(credentials, notebook) {
     stopifnot(is_valid_credentials(credentials))
-    students <- is_operation(credentials, "blok-dej-obsah", zkratka = block) |>
+    students <- is_operation(
+        credentials,
+        "blok-dej-obsah",
+        zkratka = notebook
+    ) |>
         xml2::read_xml() |>
         xml2::xml_find_all("//STUDENT")
     tibble::tibble(
         course = credentials$course,
+        notebook = notebook,
         uco = get_node(students, "UCO"),
         content = get_node(students, "OBSAH"),
         credentials = list(credentials)
