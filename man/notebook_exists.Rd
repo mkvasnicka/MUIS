@@ -22,4 +22,5 @@ logical scalar
 \dontrun{
 notebook_exists(mivs, "bodysemin02")
 }
+
 }

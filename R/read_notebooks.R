@@ -41,6 +41,8 @@ list_notebooks <- function(credentials) {
 #' @examples \dontrun{
 #' notebook_exists(mivs, "bodysemin02")
 #' }
+#'
+#' @export
 notebook_exists <- function(credentials, shortcut) {
     stopifnot(is_valid_credentials(credentials))
     notebooks <- list_notebooks(credentials)
