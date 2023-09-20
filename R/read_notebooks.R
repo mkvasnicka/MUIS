@@ -28,6 +28,26 @@ list_notebooks <- function(credentials) {
 }
 
 
+#' Check that notebook exists.
+#'
+#' `notebook_exists()` checks whether a notebook exists in a course.
+#'
+#' @param credentials (object of class "IScredentials") credentials
+#'   created by credentials()
+#' @param shortcut (string) notebook shortcut name
+#' 
+#' @return logical scalar
+#' 
+#' @examples \dontrun{
+#' notebook_exists(mivs, "bodysemin02")
+#' }
+notebook_exists <- function(credentials, shortcut) {
+    stopifnot(is_valid_credentials(credentials))
+    notebooks <- list_notebooks(credentials)
+    shortcut %in% notebooks$shortcut
+}
+
+
 #' Read content of an IS notebook
 #'
 #' `read_notebook()` reads the content of an IS notebook and returns it
