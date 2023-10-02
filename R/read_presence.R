@@ -64,7 +64,7 @@ read_presence_notebook <- function(credentials, notebook) {
     }
     inner <- stringr::str_match_all(
         notebook$content,
-        stringr::regex("^(\\d{1,2}\\.\\d{1,2}\\.):\\s*(.*)$",
+        stringr::regex("^(\\d{1,2}\\.\\s*\\d{1,2}\\.):\\s*(.*)$",
             multiline = TRUE
         )
     ) |>
