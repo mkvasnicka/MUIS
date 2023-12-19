@@ -13,7 +13,8 @@ created by credentials()}
 \item{notebook}{(string) the shortcut of the notebook}
 }
 \value{
-A tibble with columns "uco" and "content".
+A tibble with columns "uco", "content", "modified",
+and "credentials".
 }
 \description{
 \code{read_notebook()} reads the content of an IS notebook and returns it
@@ -21,6 +22,8 @@ as a tibble.
 }
 \note{
 was \code{read_is_block()}
+
+Problem: All students have the same modified date. I don't know why.
 }
 \examples{
 \dontrun{

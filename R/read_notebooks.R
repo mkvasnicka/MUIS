@@ -59,13 +59,15 @@ notebook_exists <- function(credentials, shortcut) {
 #' created by credentials()
 #' @param notebook (string) the shortcut of the notebook
 #'
-#' @return A tibble with columns "uco" and "content".
+#' @return A tibble with columns "uco", "content", "modified",
+#' and "credentials".
 #'
 #' @examples \dontrun{
 #' read_notebook(mivs, "test")
 #' }
 #'
 #' @note was `read_is_block()`
+#' @note Problem: All students have the same modified date. I don't know why.
 #'
 #' @export
 read_notebook <- function(credentials, notebook) {
@@ -82,6 +84,8 @@ read_notebook <- function(credentials, notebook) {
         notebook = notebook,
         uco = get_node(students, "UCO"),
         content = get_node(students, "OBSAH"),
+        modified = get_node(students, "ZMENENO") |>
+            as.POSIXlt(format = "%Y%m%d%H%M%S"),
         credentials = list(credentials)
     ) |>
         dplyr::mutate(uco = as.integer(uco))
