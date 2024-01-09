@@ -14,7 +14,7 @@ credentials(key, faculty, course)
 \item{course}{(string) course shortcut}
 }
 \value{
-S3 object of class "IScredentials"
+S3 object of class "ISNotebookCredentials"
 }
 \description{
 \code{credentials()} returns an object that stores all that is

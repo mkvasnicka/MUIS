@@ -8,7 +8,7 @@
 #' @param faculty (string or numeric) faculty id number
 #' @param course (string) course shortcut
 #'
-#' @return S3 object of class "IScredentials"
+#' @return S3 object of class "ISNotebookCredentials"
 #'
 #' @examples \dontrun{
 #' # Microeconomics 1 at ESF MU
@@ -19,23 +19,23 @@
 #' @export
 credentials <- function(key, faculty, course) {
     cred <- list(key = key, faculty = faculty, course = course)
-    class(cred) <- "IScredentials"
+    class(cred) <- "ISNotebookCredentials"
     cred
 }
 
 
-# method to print IScredentials objects
+# method to print ISNotebookCredentials objects
 #' @export
-print.IScredentials <- function(x, ...) {
+print.ISNotebookCredentials <- function(x, ...) {
     cat("Credentials to access course '", x$course, "' in IS.",
         sep = "")
     invisible(x)
 }
 
 
-# simple test to check whether the credentials are valid IScredentials objects
+# simple test to check whether the credentials are valid ISNotebookCredentials objects
 is_valid_credentials <- function(credentials) {
-    if (!inherits(credentials, "IScredentials"))
+    if (!inherits(credentials, "ISNotebookCredentials"))
         return(FALSE)
     if (!all(c("key", "faculty", "course") %in% names(credentials)))
         return(FALSE)
