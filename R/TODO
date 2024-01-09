@@ -7,3 +7,4 @@ TODO
     * should I fall back to scraping HTML? (it always works)
   * read a file (and write it to disk)
   * write file to IS
+* Write a vignette on reading files and test answers from IS
