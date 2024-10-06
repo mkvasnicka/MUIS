@@ -23,7 +23,7 @@ is_operation <- function(credentials, op, ...) {
     basic_string <- glue::glue(
         "https://is.muni.cz/export/pb_blok_api?klic={key};",
         "fakulta={faculty};kod={course};operace={op}",
-        .envir = credentials
+        .envir = as.environment(credentials)
     )
     if (length(params) > 0) {
         params <- purrr::map(
