@@ -90,6 +90,8 @@ read_presence_notebook <- function(credentials, notebook) {
 #'
 #' @param credentials (object of class "IScredentials") credentials
 #' created by credentials()
+#' @param one_per_week (logical) if TRUE, only one point per week is counted;
+#' if FALSE, all points are counted
 #'
 #' @return a tibble which includes two columns: uco and number of points
 #'
@@ -100,14 +102,21 @@ read_presence_notebook <- function(credentials, notebook) {
 #' }
 #'
 #' @export
-read_all_presence_points <- function(credentials) {
-    notebooks <- list_presence_notebooks(credentials) |> 
+read_all_presence_points <- function(credentials, one_per_week = TRUE) {
+    points <- function(attended, week) {
+        tibble::tibble(attended = attended, week = week) |>
+            dplyr::filter(attended) |>
+            dplyr::distinct(week) |>
+            nrow()
+    }
+    notebooks <- list_presence_notebooks(credentials) |>
         dplyr::select(credentials, shortcut)
     points <- purrr::pmap(notebooks, ~ read_presence_notebook(..1, ..2))
     points |>
         dplyr::bind_rows() |>
         dplyr::mutate(
-            attended = stringr::str_detect(attendance, STUDENT_ATTENDED)
+            attended = stringr::str_detect(attendance, STUDENT_ATTENDED),
+            week = lubridate::week(date)
         ) |>
         dplyr::group_by(uco) |>
         dplyr::arrange(date, .by_group = TRUE) |>
@@ -117,7 +126,11 @@ read_all_presence_points <- function(credentials) {
                 lubridate::month(date[attended]), ".",
                 collapse = ", "
             ),
-            attendance_points = sum(attended)
+            attendance_points = if (one_per_week) {
+                points(attended, week)
+            } else {
+                sum(attended)
+            }
         ) |> 
         dplyr::mutate(
             course = credentials$course,
@@ -125,3 +138,4 @@ read_all_presence_points <- function(credentials) {
         ) |> 
         dplyr::select(course, everything())
 }
+

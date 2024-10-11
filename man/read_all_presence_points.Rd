@@ -4,11 +4,14 @@
 \alias{read_all_presence_points}
 \title{Read presence points of all students}
 \usage{
-read_all_presence_points(credentials)
+read_all_presence_points(credentials, one_per_week = TRUE)
 }
 \arguments{
 \item{credentials}{(object of class "IScredentials") credentials
 created by credentials()}
+
+\item{one_per_week}{(logical) if TRUE, only one point per week is counted;
+if FALSE, all points are counted}
 }
 \value{
 a tibble which includes two columns: uco and number of points
