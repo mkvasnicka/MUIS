@@ -103,7 +103,7 @@ read_presence_notebook <- function(credentials, notebook) {
 #'
 #' @export
 read_all_presence_points <- function(credentials, one_per_week = TRUE) {
-    points <- function(attended, week) {
+    points_per_week <- function(attended, week) {
         tibble::tibble(attended = attended, week = week) |>
             dplyr::filter(attended) |>
             dplyr::distinct(week) |>
@@ -127,7 +127,7 @@ read_all_presence_points <- function(credentials, one_per_week = TRUE) {
                 collapse = ", "
             ),
             attendance_points = if (one_per_week) {
-                points(attended, week)
+                points_per_week(attended, week)
             } else {
                 sum(attended)
             }
